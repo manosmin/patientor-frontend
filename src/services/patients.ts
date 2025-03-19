@@ -28,9 +28,7 @@ const create = async (object: PatientFormValues) => {
   return data;
 };
 
-const createHealthCheckEntry = async (id: string, object: HealthCheckEntry) => {
-  console.log(id);
-  
+const createHealthCheckEntry = async (id: string, object: HealthCheckEntry) => {  
   const { data } = await axios.post<Patient>(
     `${apiBaseUrl}/patients/${id}/entries`,
     object

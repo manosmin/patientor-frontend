@@ -1,11 +1,12 @@
 import { useState } from "react";
-import patientService from '../../services/patients';
+import patientService from "../../services/patients";
 import { HealthCheckEntry, Patient } from "../../types";
+import axios from "axios";
 
 interface NewPatientEntryProps {
-    id: string;
-    patient: Patient;
-    setPatient: React.Dispatch<React.SetStateAction<Patient | undefined>>;
+  id: string;
+  patient: Patient;
+  setPatient: React.Dispatch<React.SetStateAction<Patient | undefined>>;
 }
 
 const NewPatientEntry = ({ id, patient, setPatient }: NewPatientEntryProps) => {
@@ -18,6 +19,7 @@ const NewPatientEntry = ({ id, patient, setPatient }: NewPatientEntryProps) => {
     diagnosisCodes: [],
     type: "HealthCheck",
   });
+  const [error, setError] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -38,58 +40,80 @@ const NewPatientEntry = ({ id, patient, setPatient }: NewPatientEntryProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData) return;
-    const newPatientEntry = await patientService.createHealthCheckEntry(id, {...formData, id: id});
-    setPatient({ ...patient, entries: newPatientEntry.entries });
+    try {
+      const newPatientEntry = await patientService.createHealthCheckEntry(id, {
+        ...formData,
+        id: id,
+      });
+      setPatient({ ...patient, entries: newPatientEntry.entries });
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response && error.response.data) {
+        if (error.response.data.error[0].message) {
+          setError(error.response.data.error[0].message);
+          setTimeout(() => {
+            setError("");
+          }, 5000);
+        } else {
+          setError("Error inserting entry.");
+          setTimeout(() => {
+            setError("");
+          }, 5000);
+        }
+      }
+    }
+  };
+
+  const errorStyle: React.CSSProperties = {
+    backgroundColor: "#f8d7da",
+    color: "#721c24",
+    border: "1px solid #f5c6cb",
+    padding: "15px",
+    borderRadius: "5px",
+    fontSize: "14px",
+    margin: "15px 0",
+    textAlign: "center",
   };
 
   return (
     <div>
+      {error && <div style={errorStyle}>{error}</div>}
       <h2>Health Check Entry</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Description:</label>
           <input
-            type="text"
             name="description"
             value={formData.description}
             onChange={(e) => handleChange(e)}
-            required
           />
         </div>
         <div>
           <label>Date:</label>
           <input
-            type="date"
             name="date"
             value={formData.date}
             onChange={(e) => handleChange(e)}
-            required
           />
         </div>
         <div>
           <label>Specialist:</label>
           <input
-            type="text"
             name="specialist"
             value={formData.specialist}
             onChange={(e) => handleChange(e)}
-            required
           />
         </div>
         <div>
           <label>Health Check Rating:</label>
           <input
-            type="number"
             name="healthCheckRating"
             value={formData.healthCheckRating}
             onChange={(e) => handleChange(e)}
-            required
           />
         </div>
         <div>
           <label>Diagnosis Codes:</label>
           <input
-            type="text"
             name="diagnosisCodes"
             value={formData.diagnosisCodes?.join(", ")}
             onChange={(e) => handleDiagnosisChange(e)}
