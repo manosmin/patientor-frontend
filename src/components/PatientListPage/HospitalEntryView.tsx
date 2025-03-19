@@ -18,7 +18,7 @@ const HospitalEntryView = ({ id, patient, setPatient }: HospitalEntryProps) => {
     specialist: "",
     diagnosisCodes: [],
     type: "Hospital",
-    discharge: { date: '', criteria: '' },
+    discharge: { date: "", criteria: "" },
   });
   const [error, setError] = useState<string>("");
 
@@ -83,6 +83,7 @@ const HospitalEntryView = ({ id, patient, setPatient }: HospitalEntryProps) => {
         <div>
           <label>Description:</label>
           <input
+            type="text"
             name="description"
             value={formData.description}
             onChange={(e) => handleChange(e)}
@@ -91,6 +92,7 @@ const HospitalEntryView = ({ id, patient, setPatient }: HospitalEntryProps) => {
         <div>
           <label>Date:</label>
           <input
+            type="date"
             name="date"
             value={formData.date}
             onChange={(e) => handleChange(e)}
@@ -99,6 +101,7 @@ const HospitalEntryView = ({ id, patient, setPatient }: HospitalEntryProps) => {
         <div>
           <label>Specialist:</label>
           <input
+            type="text"
             name="specialist"
             value={formData.specialist}
             onChange={(e) => handleChange(e)}
@@ -107,6 +110,7 @@ const HospitalEntryView = ({ id, patient, setPatient }: HospitalEntryProps) => {
         <div>
           <label>Discharge Criteria:</label>
           <input
+            type="text"
             name="criteria"
             value={formData.discharge.criteria}
             onChange={(e) => handleDischargeChange(e)}
@@ -115,6 +119,7 @@ const HospitalEntryView = ({ id, patient, setPatient }: HospitalEntryProps) => {
         <div>
           <label>Discharge Date:</label>
           <input
+            type="date"
             name="date"
             value={formData.discharge.date}
             onChange={(e) => handleDischargeChange(e)}
@@ -123,6 +128,7 @@ const HospitalEntryView = ({ id, patient, setPatient }: HospitalEntryProps) => {
         <div>
           <label>Diagnosis Codes:</label>
           <input
+            type="text"
             name="diagnosisCodes"
             value={formData.diagnosisCodes?.join(", ")}
             onChange={(e) => handleDiagnosisChange(e)}

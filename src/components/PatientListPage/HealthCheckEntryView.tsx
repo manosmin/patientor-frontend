@@ -10,7 +10,11 @@ interface HospitalEntryProps {
   setPatient: React.Dispatch<React.SetStateAction<Patient | undefined>>;
 }
 
-const HealthCheckEntryView = ({ id, patient, setPatient }: HospitalEntryProps) => {
+const HealthCheckEntryView = ({
+  id,
+  patient,
+  setPatient,
+}: HospitalEntryProps) => {
   const [formData, setFormData] = useState<HealthCheckEntry>({
     id: "",
     description: "",
@@ -23,7 +27,7 @@ const HealthCheckEntryView = ({ id, patient, setPatient }: HospitalEntryProps) =
   const [error, setError] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;    
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: name === "healthCheckRating" ? Number(value) : value,
@@ -72,6 +76,7 @@ const HealthCheckEntryView = ({ id, patient, setPatient }: HospitalEntryProps) =
         <div>
           <label>Description:</label>
           <input
+            type="text"
             name="description"
             value={formData.description}
             onChange={(e) => handleChange(e)}
@@ -80,6 +85,7 @@ const HealthCheckEntryView = ({ id, patient, setPatient }: HospitalEntryProps) =
         <div>
           <label>Date:</label>
           <input
+            type="date"
             name="date"
             value={formData.date}
             onChange={(e) => handleChange(e)}
@@ -88,6 +94,7 @@ const HealthCheckEntryView = ({ id, patient, setPatient }: HospitalEntryProps) =
         <div>
           <label>Specialist:</label>
           <input
+            type="text"
             name="specialist"
             value={formData.specialist}
             onChange={(e) => handleChange(e)}
@@ -96,6 +103,9 @@ const HealthCheckEntryView = ({ id, patient, setPatient }: HospitalEntryProps) =
         <div>
           <label>Health Check Rating:</label>
           <input
+            type="number"
+            min="0"
+            max="3"
             name="healthCheckRating"
             value={formData.healthCheckRating}
             onChange={(e) => handleChange(e)}
@@ -104,6 +114,7 @@ const HealthCheckEntryView = ({ id, patient, setPatient }: HospitalEntryProps) =
         <div>
           <label>Diagnosis Codes:</label>
           <input
+            type="text"
             name="diagnosisCodes"
             value={formData.diagnosisCodes?.join(", ")}
             onChange={(e) => handleDiagnosisChange(e)}

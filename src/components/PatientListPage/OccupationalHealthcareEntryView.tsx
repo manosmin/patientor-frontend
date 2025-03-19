@@ -10,7 +10,11 @@ interface OccupationalHealthcareEntryViewProps {
   setPatient: React.Dispatch<React.SetStateAction<Patient | undefined>>;
 }
 
-const OccupationalHealthcareEntryView = ({ id, patient, setPatient }: OccupationalHealthcareEntryViewProps) => {
+const OccupationalHealthcareEntryView = ({
+  id,
+  patient,
+  setPatient,
+}: OccupationalHealthcareEntryViewProps) => {
   const [formData, setFormData] = useState<OccupationalHealthcareEntry>({
     id: "",
     description: "",
@@ -84,6 +88,7 @@ const OccupationalHealthcareEntryView = ({ id, patient, setPatient }: Occupation
         <div>
           <label>Description:</label>
           <input
+            type="text"
             name="description"
             value={formData.description}
             onChange={(e) => handleChange(e)}
@@ -92,6 +97,7 @@ const OccupationalHealthcareEntryView = ({ id, patient, setPatient }: Occupation
         <div>
           <label>Date:</label>
           <input
+            type="date"
             name="date"
             value={formData.date}
             onChange={(e) => handleChange(e)}
@@ -100,6 +106,7 @@ const OccupationalHealthcareEntryView = ({ id, patient, setPatient }: Occupation
         <div>
           <label>Specialist:</label>
           <input
+            type="text"
             name="specialist"
             value={formData.specialist}
             onChange={(e) => handleChange(e)}
@@ -108,6 +115,7 @@ const OccupationalHealthcareEntryView = ({ id, patient, setPatient }: Occupation
         <div>
           <label>Employer Name:</label>
           <input
+            type="text"
             name="employerName"
             value={formData.employerName}
             onChange={(e) => handleChange(e)}
@@ -116,6 +124,7 @@ const OccupationalHealthcareEntryView = ({ id, patient, setPatient }: Occupation
         <div>
           <label>Sick Leave Start Date:</label>
           <input
+            type="date"
             name="startDate"
             value={formData.sickLeave.startDate}
             onChange={(e) => handleSickLeaveChange(e)}
@@ -124,6 +133,7 @@ const OccupationalHealthcareEntryView = ({ id, patient, setPatient }: Occupation
         <div>
           <label>Sick Leave End Date:</label>
           <input
+            type="date"
             name="endDate"
             value={formData.sickLeave.endDate}
             onChange={(e) => handleSickLeaveChange(e)}
@@ -132,6 +142,7 @@ const OccupationalHealthcareEntryView = ({ id, patient, setPatient }: Occupation
         <div>
           <label>Diagnosis Codes:</label>
           <input
+            type="text"
             name="diagnosisCodes"
             value={formData.diagnosisCodes?.join(", ")}
             onChange={(e) => handleDiagnosisChange(e)}
