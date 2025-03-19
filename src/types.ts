@@ -31,7 +31,7 @@ export interface BaseEntry {
 export interface OccupationalHealthcareEntry extends BaseEntry {
   type: "OccupationalHealthcare";
   employerName: string;
-  sickLeave?: {
+  sickLeave: {
     startDate: string;
     endDate: string;
   };
