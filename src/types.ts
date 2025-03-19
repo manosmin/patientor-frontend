@@ -50,6 +50,8 @@ export interface HealthCheckEntry extends BaseEntry {
   healthCheckRating: HealthCheckRating;
 }
 
+export type HealthCheckEntryNoId = Omit<HealthCheckEntry, "id" | "entries">;
+
 export enum HealthCheckRating {
   "Healthy" = 0,
   "LowRisk" = 1,

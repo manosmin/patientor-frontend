@@ -7,6 +7,7 @@ import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
 import WorkIcon from "@mui/icons-material/Work";
 import VaccinesIcon from "@mui/icons-material/Vaccines";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
+import NewPatientEntry from "./NewPatientEntry";
 
 const PatientPage = () => {
   const [patient, setPatient] = useState<Patient>();
@@ -162,6 +163,7 @@ const PatientPage = () => {
   return (
     patient && (
       <div>
+        {id && <NewPatientEntry id={id} patient={patient} setPatient={setPatient} />}
         <h2>{patient.name}</h2>
         <p>{patient.ssn}</p>
         <p>{patient.occupation}</p>
