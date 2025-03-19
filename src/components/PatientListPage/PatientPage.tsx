@@ -1,10 +1,12 @@
 import { useParams } from "react-router-dom";
-import { Entry, Patient } from "../../types";
+import { Diagnosis, Entry, Patient } from "../../types";
 import { useEffect, useState } from "react";
 import patientService from "../../services/patients";
+import diagnosisService from "../../services/diagnoses";
 
 const PatientPage = () => {
   const [patient, setPatient] = useState<Patient>();
+  const [diagnoses, setDiagnoses] = useState<Diagnosis[]>();
   const id = useParams().id;
 
   useEffect(() => {
@@ -17,10 +19,31 @@ const PatientPage = () => {
     void fetchPatient();
   }, [id]);
 
+  useEffect(() => {
+    const fetchDiagnoses = async () => {
+      const diagnoses = await diagnosisService.getAll();
+      setDiagnoses(diagnoses);
+    };
+
+    void fetchDiagnoses();
+  }, []);
+
   const assertNever = (value: never): never => {
     throw new Error(
       `Unhandled discriminated union member: ${JSON.stringify(value)}`
     );
+  };
+
+  const mapDiagnosisToCode = (code: string): string => {
+    if (!diagnoses) return code;
+
+    const diagnosis = diagnoses.find((d) => d.code == code);
+
+    if (diagnosis) {
+      return code + ' ' + diagnosis.name;
+    } else {
+      return code;
+    }
   };
 
   const diagnosesContent = (e: Entry) => {
@@ -28,37 +51,70 @@ const PatientPage = () => {
       case "HealthCheck":
         return (
           <div>
-            <p><strong>Date: </strong>{e.date}</p>
-            <p><strong>Description: </strong>{e.description}</p>
-            <strong>Diagnosis codes: </strong>{e.diagnosisCodes && <ul>
-              {e.diagnosisCodes.map(d => <li key={e.id.concat(d)}>{d}</li>)}
-            </ul>}
+            <p>
+              <strong>Date: </strong>
+              {e.date}
+            </p>
+            <p>
+              <strong>Description: </strong>
+              {e.description}
+            </p>
+            <strong>Diagnosis codes: </strong>
+            {e.diagnosisCodes && (
+              <ul>
+                {e.diagnosisCodes.map((d) => (
+                  <li key={e.id.concat(d)}>{mapDiagnosisToCode(d)}</li>
+                ))}
+              </ul>
+            )}
           </div>
         );
       case "Hospital":
         return (
           <div>
-            <p><strong>Date: </strong>{e.date}</p>
-            <p><strong>Description: </strong>{e.description}</p>
-            <strong>Diagnosis codes: </strong>{e.diagnosisCodes && <ul>
-              {e.diagnosisCodes.map(d => <li key={e.id.concat(d)}>{d}</li>)}
-            </ul>}
+            <p>
+              <strong>Date: </strong>
+              {e.date}
+            </p>
+            <p>
+              <strong>Description: </strong>
+              {e.description}
+            </p>
+            <strong>Diagnosis codes: </strong>
+            {e.diagnosisCodes && (
+              <ul>
+                {e.diagnosisCodes.map((d) => (
+                  <li key={e.id.concat(d)}>{mapDiagnosisToCode(d)}</li>
+                ))}
+              </ul>
+            )}
           </div>
         );
       case "OccupationalHealthcare":
         return (
           <div>
-            <p><strong>Date: </strong>{e.date}</p>
-            <p><strong>Description: </strong>{e.description}</p>
-            <strong>Diagnosis codes: </strong>{e.diagnosisCodes && <ul>
-              {e.diagnosisCodes.map(d => <li key={e.id.concat(d)}>{d}</li>)}
-            </ul>}
+            <p>
+              <strong>Date: </strong>
+              {e.date}
+            </p>
+            <p>
+              <strong>Description: </strong>
+              {e.description}
+            </p>
+            <strong>Diagnosis codes: </strong>
+            {e.diagnosisCodes && (
+              <ul>
+                {e.diagnosisCodes.map((d) => (
+                  <li key={e.id.concat(d)}>{mapDiagnosisToCode(d)}</li>
+                ))}
+              </ul>
+            )}
           </div>
         );
       default:
         return assertNever(e);
     }
-  }
+  };
 
   return (
     patient && (
@@ -67,9 +123,7 @@ const PatientPage = () => {
         <p>{patient.ssn}</p>
         <p>{patient.occupation}</p>
         <h3>Entries</h3>
-        <div>
-          {patient.entries.map((e) => diagnosesContent(e))}
-        </div>
+        <div>{patient.entries.map((e) => diagnosesContent(e))}</div>
       </div>
     )
   );
