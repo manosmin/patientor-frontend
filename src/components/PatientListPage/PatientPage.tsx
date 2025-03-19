@@ -3,6 +3,10 @@ import { Diagnosis, Entry, Patient } from "../../types";
 import { useEffect, useState } from "react";
 import patientService from "../../services/patients";
 import diagnosisService from "../../services/diagnoses";
+import MedicalInformationIcon from "@mui/icons-material/MedicalInformation";
+import WorkIcon from "@mui/icons-material/Work";
+import VaccinesIcon from "@mui/icons-material/Vaccines";
+import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 
 const PatientPage = () => {
   const [patient, setPatient] = useState<Patient>();
@@ -40,9 +44,24 @@ const PatientPage = () => {
     const diagnosis = diagnoses.find((d) => d.code == code);
 
     if (diagnosis) {
-      return code + ' ' + diagnosis.name;
+      return code + " " + diagnosis.name;
     } else {
       return code;
+    }
+  };
+
+  const healthCheckRatingToIcon = (rating: number) => {
+    switch (rating) {
+      case 0:
+        return <FavoriteRoundedIcon color="primary" />;
+      case 1:
+        return <FavoriteRoundedIcon color="success" />;
+      case 2:
+        return <FavoriteRoundedIcon color="error" />;
+      case 3:
+        return <FavoriteRoundedIcon color="warning" />;
+      default:
+        return <FavoriteRoundedIcon color="secondary" />;
     }
   };
 
@@ -51,6 +70,7 @@ const PatientPage = () => {
       case "HealthCheck":
         return (
           <div>
+            <MedicalInformationIcon />
             <p>
               <strong>Date: </strong>
               {e.date}
@@ -59,19 +79,27 @@ const PatientPage = () => {
               <strong>Description: </strong>
               {e.description}
             </p>
-            <strong>Diagnosis codes: </strong>
+            <p>
+              <strong>Diagnose by: </strong>
+              {e.specialist}
+            </p>
             {e.diagnosisCodes && (
-              <ul>
-                {e.diagnosisCodes.map((d) => (
-                  <li key={e.id.concat(d)}>{mapDiagnosisToCode(d)}</li>
-                ))}
-              </ul>
+              <>
+                <strong>Diagnosis codes: </strong>
+                <ul>
+                  {e.diagnosisCodes.map((d) => (
+                    <li key={e.id.concat(d)}>{mapDiagnosisToCode(d)}</li>
+                  ))}
+                </ul>
+              </>
             )}
+            <p>{healthCheckRatingToIcon(e.healthCheckRating)}</p>
           </div>
         );
       case "Hospital":
         return (
           <div>
+            <VaccinesIcon />
             <p>
               <strong>Date: </strong>
               {e.date}
@@ -80,19 +108,32 @@ const PatientPage = () => {
               <strong>Description: </strong>
               {e.description}
             </p>
-            <strong>Diagnosis codes: </strong>
+            <p>
+              <strong>Diagnose by: </strong>
+              {e.specialist}
+            </p>
             {e.diagnosisCodes && (
-              <ul>
-                {e.diagnosisCodes.map((d) => (
-                  <li key={e.id.concat(d)}>{mapDiagnosisToCode(d)}</li>
-                ))}
-              </ul>
+              <>
+                <strong>Diagnosis codes: </strong>
+                <ul>
+                  {e.diagnosisCodes.map((d) => (
+                    <li key={e.id.concat(d)}>{mapDiagnosisToCode(d)}</li>
+                  ))}
+                </ul>
+              </>
             )}
+            <div>
+              <p>
+                <strong>Discharge: </strong>
+                {e.discharge.date}, {e.discharge.criteria}
+              </p>
+            </div>
           </div>
         );
       case "OccupationalHealthcare":
         return (
           <div>
+            <WorkIcon />
             <p>
               <strong>Date: </strong>
               {e.date}
@@ -101,13 +142,15 @@ const PatientPage = () => {
               <strong>Description: </strong>
               {e.description}
             </p>
-            <strong>Diagnosis codes: </strong>
             {e.diagnosisCodes && (
-              <ul>
-                {e.diagnosisCodes.map((d) => (
-                  <li key={e.id.concat(d)}>{mapDiagnosisToCode(d)}</li>
-                ))}
-              </ul>
+              <>
+                <strong>Diagnosis codes: </strong>
+                <ul>
+                  {e.diagnosisCodes.map((d) => (
+                    <li key={e.id.concat(d)}>{mapDiagnosisToCode(d)}</li>
+                  ))}
+                </ul>
+              </>
             )}
           </div>
         );
